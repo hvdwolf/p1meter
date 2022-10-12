@@ -45,7 +45,7 @@ q_data = "select * from v_p1data";
 #q_daily= "select * from v_p1daily"
 q_daily = "select importkwh, exportkwh, verbruiknuw, verbruiknul1w, gastotaalm3, strftime('%d-%m-%Y',timestamp) as datum from v_p1daily"
 
-q_netto_per_dag = "select timestamp tmstmp, verbruiknuw from v_p1data where substr(timestamp,1,10) == date()"
+q_netto_per_dag = "select timestamp tmstmp, verbruiknuw, importkwh, exportkwh from v_p1data where substr(timestamp,1,10) == date()"
 
 q_netto_gas_per_dag = "select t_next.timestamp tmstmp, round((t_next.gastotaalm3 - t.gastotaalm3),2) as totaalm3 from p1meterdata  as t inner join p1meterdata as t_next on t_next.rowid=t.rowid+1  where substr(t_next.timestamp,1,10) == date() order by t_next.timestamp"
 
@@ -106,8 +106,7 @@ while True:
         mpgraphs.netto_per_dag(window, data, values, "gas")
     elif event == '-CAL-':
         #print(values['-CAL-'])
-        #myquery = "select substr(timestamp,12,5) tmstmp, verbruiknuw from v_p1data where substr(timestamp,1,10) == '" + values['-CAL-'] + "'"
-        myquery = "select timestamp tmstmp, verbruiknuw from v_p1data where substr(timestamp,1,10) == '" + values['-CAL-'] + "'"
+        myquery = "select timestamp tmstmp, verbruiknuw, importkwh, exportkwh from v_p1data where substr(timestamp,1,10) == '" + values['-CAL-'] + "'"
         do_query(window, myquery)
         data = pandas.read_sql(myquery, connection)
         mpgraphs.netto_per_dag(window, data, values, "el")

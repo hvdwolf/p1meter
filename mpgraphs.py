@@ -58,12 +58,26 @@ def netto_per_dag(window, data, all_values, type):
     locale.setlocale(locale.LC_ALL, 'nl_NL.UTF-8')
     if (type == "el"):
         #print(str(round(((data.verbruiknuw).to_numpy().sum())/1000,1)))
+        estart = data.exportkwh[0]
+        eeind = data.exportkwh[len(data.exportkwh)-1]
+        expE = round(eeind-estart, 1)
+        #print("geproduceerd: ", str( round(eeind-estart, 1) ))
+        istart = data.importkwh[0]
+        ieind = data.importkwh[len(data.importkwh)-1]
+        impE = round(ieind-istart,1)
+        #print("verbruikt: ", str(round(ieind-istart,1)) )
+        #print("netto: ", str( round(impE-expE,1)) )
+        stroom = "(verbruikt: " + str(round(ieind-istart,1)) + " kWh, geproduceerd: " + str(round(eeind-estart, 1))
+        if ((impE-expE) <= 0):
+            stroomnetto = " kWh, netto geproduceerd: " + str(round(impE-expE,1)) + " kWh)"
+        else:
+            stroomnetto = " kWh, verbruikt: " + str(round(impE-expE,1)) + " kWh)"
         plt.ylabel('Watts')
         plt.title("positief (paars): verbruikt; negatief (groen): door zonnepanelen geleverd")
         if (len(all_values['-CAL-']) == 0):
-            plt.suptitle("energie vandaag")
+            plt.suptitle("energie vandaag " + stroom + stroomnetto)
         else:
-            plt.suptitle("energie verbruik op " + datetime.strptime(all_values['-CAL-'], '%Y-%m-%d').strftime('%a %d-%m-%Y'))
+            plt.suptitle("energie verbruik op " + datetime.strptime(all_values['-CAL-'], '%Y-%m-%d').strftime('%a %d-%m-%Y') + " " + stroom + stroomnetto)
     else:
         plt.ylabel('m3')
         plt.title("Gasverbruik")
