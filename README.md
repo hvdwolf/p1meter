@@ -24,6 +24,6 @@ Note: The texts/labels inside these scripts are in Dutch.
 
 - Client:
     * In the config.py first specify the location of your (regularly copied) database.
-    * from the command line type "./graphp1meter.py" or on Windows "python3 graphp1meter.py".
+    * from the command line type "./gp1meter.py" or on Windows "python3 gp1meter.py".
 
 
