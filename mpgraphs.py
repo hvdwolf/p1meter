@@ -69,7 +69,8 @@ def netto_per_dag(window, data, all_values, type):
         #print("netto: ", str( round(impE-expE,1)) )
         stroom = "(verbruikt: " + str(round(ieind-istart,1)) + " kWh, geproduceerd: " + str(round(eeind-estart, 1))
         if ((impE-expE) <= 0):
-            stroomnetto = " kWh, netto geproduceerd: " + str(round(impE-expE,1)) + " kWh)"
+            prod = abs(round(impE-expE,1))
+            stroomnetto = " kWh, netto geproduceerd: " + str(prod) + " kWh)"
         else:
             stroomnetto = " kWh, verbruikt: " + str(round(impE-expE,1)) + " kWh)"
         plt.ylabel('Watts')
