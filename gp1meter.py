@@ -97,7 +97,7 @@ while True:
         data = pandas.read_sql(myquery, connection)
         mpgraphs.netto_per_dag(window, data, values, "gas")
     elif event == 'Verbruik per week':
-        do_query(window, q_verbruik_per_week)
+        do_query(window, q.q_verbruik_per_week)
         data = pandas.read_sql(q.q_verbruik_per_week, connection)
         mpgraphs.verbruik_per_week(window, data, values)
     elif event == 'Gescheiden vandaag':
