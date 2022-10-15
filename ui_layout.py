@@ -44,9 +44,10 @@ def create_and_show_gui():
                      ],
                 ] 
 # sg.Button('Gescheiden vandaag'), ==> werk niet goed
+    dagenLayout = [ [ sg.Button('Verbruik per dag'), sg.Text('aantal: '),sg.Radio('7', "aantaldagen", default=True, key='_zeven_'), sg.Radio('14', "aantaldagen", default=False, key='_veertien_'), sg.Radio('onbeperkt', "aantaldagen", default=False, key='_onbeperkt_')] ]
 
     mainLayout = [ [sg.Text('Stroomverbruik', font = ('any', 12, 'bold')), sg.Button('Vandaag'), sg.CalendarButton('Op datum', key='_CALENDAR_', target='-CAL-', format=( '%Y-%m-%d'),locale='nl_NL',), sg.Text('Gasverbruik', font = ('any', 12, 'bold')), sg.Button('Vandaag', key='_gasvandaag_'), sg.CalendarButton('Op datum', key='_GCALENDAR_', target='-GCAL-', format=( '%Y-%m-%d'),locale='nl_NL',),],
-               [sg.Text('Verbruiks Overzichten', font = ('any', 12, 'bold')), sg.Button('Verbruik per dag'), sg.Button('Verbruik per week'), sg.Button('Dagelijkse totalen'), sg.Button('Sluiten', button_color=('white', 'firebrick3'))],
+               [sg.Text('Verbruiks Overzichten', font = ('any', 12, 'bold')), sg.Frame('', dagenLayout), sg.Button('Verbruik per week'), sg.Button('Dagelijkse totalen'), sg.Button('Sluiten', button_color=('white', 'firebrick3'))],
                [sg.Text('Diagram type Verbruiks Overzichten', font = ('any', 12, 'bold')), sg.Radio('Staafdiagram', "grafiektype", default=True, key='_staaf_'), sg.Radio('Lijndiagram', "grafiektype", default=False, key='_lijn_')],
                #[sg.Text('', key='_progress_msg')],
                [sg.In(key='-CAL-', enable_events=True, visible=False), sg.In(key='-GCAL-', enable_events=True, visible=False)],

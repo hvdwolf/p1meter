@@ -151,6 +151,7 @@ def gescheiden_per_dag(window, data, all_values):
     draw_figure_w_toolbar(window['fig_cv'].TKCanvas, fig, window['controls_cv'].TKCanvas)
 
 def verbruik_per_dag(window, data, all_values):
+    #print(all_values)
     #Get current plot/figure and clear it
     fig = plt.gcf()
     plt.clf()
