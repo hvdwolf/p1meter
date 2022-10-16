@@ -47,13 +47,22 @@ class Toolbar(NavigationToolbar2Tk):
         super(Toolbar, self).__init__(*args, **kwargs)
 
 
+# function to add value labels
+# This will add the value of import, export and m3 to the top of the bar
+def addlabels(bar1,bar2, bar3):
+
+    for rect in bar1 + bar2 + bar3:
+        height = rect.get_height()
+        plt.text(rect.get_x() + rect.get_width() / 2.0, height, f'{height:.1f}', ha='center', va='bottom')
+
+
+
 # ------------------------------- Graphs for values
 def netto_per_dag(window, data, all_values, type):
     #Get current plot/figure and clear it
     fig = plt.gcf()
     plt.clf()
     plt.xlabel('metingen per 24 uur')
-    #print(type)
     # Remove below locale value or replace with your own locale
     locale.setlocale(locale.LC_ALL, 'nl_NL.UTF-8')
     if (type == "el"):
@@ -155,17 +164,17 @@ def verbruik_per_dag(window, data, all_values):
     #Get current plot/figure and clear it
     fig = plt.gcf()
     plt.clf()
-    #X_axis = np.arange(len(data.weekdag))
     X_axis = np.arange(len(data.dagdatum))
     if (all_values['_staaf_']):
-        #bar1 = plt.bar(X_axis - 0.3, data.importkwh, color = 'm', width = 0.2, labels = data.importkwh, label = 'Import kWh')
         imp = plt.bar(X_axis - 0.15, data.importkwh, color = 'm', width = 0.15, label = 'Import kWh')
         exp = plt.bar(X_axis, data.exportkwh, color = 'g', width = 0.15, label = 'Export kWh (zonnepanelen)')
         m3 = plt.bar(X_axis + 0.15, data.gastotaalm3, color = 'r', width = 0.15, label = 'gas m3')
+        addlabels(imp, exp, m3)
     else:
         imp = plt.plot(X_axis, data.importkwh, 'm-',  label = 'Import kWh')
         exp = plt.plot(X_axis, data.exportkwh, 'g-', label = 'Export kWh (zonnepanelen)')
         m3 = plt.plot(X_axis, data.gastotaalm3, 'r-', label = 'gas m3')
+        #addlabels(imp, exp, m3)
 
     plt.grid(axis='y', linestyle='--')
     plt.xticks(X_axis, data.dagdatum, rotation=30)
@@ -191,6 +200,7 @@ def verbruik_per_week(window, data, all_values):
     bar1 = plt.bar(X_axis - 0.15, data.importkwh, color = 'm', width = 0.15, label = 'Import kWh')
     bar2 = plt.bar(X_axis, data.exportkwh, color = 'g', width = 0.15, label = 'Export kWh')
     bar3 = plt.bar(X_axis + 0.15, data.gastotaalm3, color = 'r', width = 0.15, label = 'gas m3')
+    addlabels(bar1, bar2, bar3)
     plt.grid(axis='y', linestyle='--')
     #plt.xticks(X_axis, data.weekno)
     plt.xticks(X_axis, data.wknrdatum)
