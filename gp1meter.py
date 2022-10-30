@@ -24,7 +24,6 @@ from datetime import timedelta
 import mpgraphs
 import config
 import ui_layout
-import queries
 import queries as q
 
 def do_query(window, myquery):
