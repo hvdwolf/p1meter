@@ -166,21 +166,21 @@ def verbruik_per_dag(window, data, all_values):
     plt.clf()
     X_axis = np.arange(len(data.dagdatum))
     if (all_values['_staaf_']):
-        imp = plt.bar(X_axis - 0.15, data.importkwh, color = 'm', width = 0.15, label = 'Import kWh')
-        exp = plt.bar(X_axis, data.exportkwh, color = 'g', width = 0.15, label = 'Export kWh (zonnepanelen)')
-        m3 = plt.bar(X_axis + 0.15, data.gastotaalm3, color = 'r', width = 0.15, label = 'gas m3')
+        imp = plt.bar(X_axis - 0.15, data.importkwh, color = 'm', width = 0.15, label = 'kWh verbruikt')
+        exp = plt.bar(X_axis, data.exportkwh, color = 'g', width = 0.15, label = 'kWh (zon)geleverd')
+        m3 = plt.bar(X_axis + 0.15, data.gastotaalm3, color = 'r', width = 0.15, label = 'm3 gas verbruikt')
         addlabels(imp, exp, m3)
     else:
-        imp = plt.plot(X_axis, data.importkwh, 'm-',  label = 'Import kWh')
-        exp = plt.plot(X_axis, data.exportkwh, 'g-', label = 'Export kWh (zonnepanelen)')
-        m3 = plt.plot(X_axis, data.gastotaalm3, 'r-', label = 'gas m3')
+        imp = plt.plot(X_axis, data.importkwh, 'm-',  label = 'kWh verbruikt')
+        exp = plt.plot(X_axis, data.exportkwh, 'g-', label = 'kWh (zon)geleverd')
+        m3 = plt.plot(X_axis, data.gastotaalm3, 'r-', label = 'm3 gas verbruikt')
         #addlabels(imp, exp, m3)
 
     plt.grid(axis='y', linestyle='--')
     plt.xticks(X_axis, data.dagdatum, rotation=30)
     plt.xlabel('weekdagen')
     plt.ylabel('kWh / m3')
-    plt.legend(loc='upper left')
+    plt.legend(loc='upper right')
     plt.title("energie verbruik/geleverd de afgelopen dagen")
     fig = plt.gcf()
     DPI = fig.get_dpi()
@@ -215,7 +215,31 @@ def verbruik_per_week(window, data, all_values):
     #plt.show()
     # ------------------------------- Instead of plt.show()
     draw_figure_w_toolbar(window['fig_cv'].TKCanvas, fig, window['controls_cv'].TKCanvas)
-  
+
+
+def verbruik_per_maand(window, data, all_values):
+    #Get current plot/figure and clear it
+    fig = plt.gcf()
+    plt.clf()
+    X_axis = np.arange(len(data.month_name))
+    bar1 = plt.bar(X_axis - 0.15, data.importkwh, color = 'm', width = 0.15, label = 'Import kWh')
+    bar2 = plt.bar(X_axis, data.exportkwh, color = 'g', width = 0.15, label = 'Export kWh')
+    bar3 = plt.bar(X_axis + 0.15, data.gastotaalm3, color = 'r', width = 0.15, label = 'gas m3')
+    addlabels(bar1, bar2, bar3)
+    plt.grid(axis='y', linestyle='--')
+    #plt.xticks(X_axis, data.weekno)
+    plt.xticks(X_axis, data.month)
+    plt.xlabel('maandnummers (maand)')
+    plt.ylabel('kWh / m3')
+    plt.legend( (bar1, bar2, bar3), ('kWh verbruikt', 'kWh (zon)geleverd', 'm3 gas verbruikt') )
+    plt.title("energie verbruik/geleverd de afgelopen maanden")
+    fig = plt.gcf()
+    DPI = fig.get_dpi()
+    # ------------------------------- you have to play with this size to reduce the movement error when the mouse hovers over the figure, it's close to canvas size
+    fig.set_size_inches(gr_width / float(DPI), gr_height / float(DPI))
+    #plt.show()
+    # ------------------------------- Instead of plt.show()
+    draw_figure_w_toolbar(window['fig_cv'].TKCanvas, fig, window['controls_cv'].TKCanvas)  
 
 def daily_totals(window, data):
     #Get current plot/figure and clear it

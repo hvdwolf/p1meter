@@ -24,6 +24,7 @@ from datetime import timedelta
 import mpgraphs
 import config
 import ui_layout
+import queries
 import queries as q
 
 def do_query(window, myquery):
@@ -100,6 +101,10 @@ while True:
         do_query(window, q.q_verbruik_per_week)
         data = pandas.read_sql(q.q_verbruik_per_week, connection)
         mpgraphs.verbruik_per_week(window, data, values)
+    elif event == 'Verbruik per maand':
+        do_query(window, q.q_verbruik_per_maand)
+        data = pandas.read_sql(q.q_verbruik_per_maand, connection)
+        mpgraphs.verbruik_per_maand(window, data, values)
     elif event == 'Gescheiden vandaag':
         do_query(window, q_gescheiden_per_dag)
         data = pandas.read_sql(q.q_gescheiden_per_dag, connection)

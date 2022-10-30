@@ -30,6 +30,8 @@ q_verbruik = "select case when strftime('%w',t_next.timestamp)=='0' then 'zondag
 
 q_verbruik_per_week = "select t_next.weekno,strftime('%d-%m-%Y',t_next.timestamp), (t_next.weekno ||' (' || strftime('%d-%m',t_next.timestamp)||')') as wknrdatum, round((t_next.importkwh - t.importkwh),1) as importkwh, round((t_next.exportkwh-t.exportkwh),1) as exportkwh, round((t_next.gastotaalm3 - t.gastotaalm3),1) as gastotaalm3 from v_p1weekly as t inner join v_p1weekly as t_next on t_next.rowid=t.rowid+1"
 
+q_verbruik_per_maand = "select t_next.month,strftime('%d-%m-%Y',t_next.timestamp), (t_next.month ||' (' || case when strftime('%m', t_next.timestamp)=='01' then 'jan' when strftime('%m', t_next.timestamp)=='02' then 'feb' when strftime('%m', t_next.timestamp)=='03' then 'mrt' when strftime('%m', t_next.timestamp)=='04' then 'apr' when strftime('%m', t_next.timestamp)=='05' then 'mei' when strftime('%m', t_next.timestamp)==06 then 'jun' when strftime('%m', t_next.timestamp)=='07' then 'jul' when strftime('%m', t_next.timestamp)=='08' then 'aug' when strftime('%m', t_next.timestamp)=='09' then 'sep' when strftime('%m', t_next.timestamp)=='10' then 'okt' when strftime('%m', t_next.timestamp)=='11' then 'nov' when strftime('%m', t_next.timestamp)=='12' then 'dec' end ||')') as month_name, round((t_next.importkwh - t.importkwh),1) as importkwh, round((t_next.exportkwh-t.exportkwh),1) as exportkwh, round((t_next.gastotaalm3 - t.gastotaalm3),1) as gastotaalm3 from v_p1monthly as t inner join v_p1monthly as t_next on t_next.rowid=t.rowid+1" 
+
 # Select last 14 records
 last_fourteen = "select * from  (select * from v_p1data order by id desc limit 14) Var1 order by id asc;"
 # select last 7 days (week overview)
@@ -38,6 +40,7 @@ last_seven = "select * from (select * from v_p1daily order by id desc limit 7) V
 
 # New unused query for last date of the month of the current year
 q_ldmcy = 'select substr(max(timestamp), 1,10) from v_p1data where strftime("%m", timestamp) != strftime("%m", timestamp, "+1 day") and strftime("%Y", timestamp) = strftime("%Y", "now")'
+# Select last day of the month
 q_ldmcy = 'select substr(max(timestamp), 1,10) from v_p1data where strftime("%m", timestamp) != strftime("%m", timestamp, "+1 day")'
 # select sundays
 q_evsun = 'select substr(max(timestamp),1,10) from v_p1data where strftime("%w", timestamp) = "0";'
