@@ -228,7 +228,7 @@ def verbruik_per_maand(window, data, all_values):
     addlabels(bar1, bar2, bar3)
     plt.grid(axis='y', linestyle='--')
     #plt.xticks(X_axis, data.weekno)
-    plt.xticks(X_axis, data.month)
+    plt.xticks(X_axis, data.month_name)
     plt.xlabel('maandnummers (maand)')
     plt.ylabel('kWh / m3')
     plt.legend( (bar1, bar2, bar3), ('kWh verbruikt', 'kWh (zon)geleverd', 'm3 gas verbruikt') )
