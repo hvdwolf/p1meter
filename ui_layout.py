@@ -47,16 +47,24 @@ def create_and_show_gui():
 # Vorige: [sg.Text('Verbruiks Overzichten', font = ('any', 12, 'bold')), sg.Frame('', dagenLayout), sg.Button('Verbruik per week'), sg.Button('Dagelijkse totalen'), sg.Button('Sluiten', button_color=('white', 'firebrick3'))],
 #                [sg.Text('Verbruiks Overzichten', font = ('any', 12, 'bold')), sg.Frame('', dagenLayout), sg.Button('Verbruik per week'), sg.Button('Verbruik per maand'), sg.Button('Sluiten', button_color=('white', 'firebrick3'))],
     # per periode
-    periodeLayout = [ [ sg.Radio('4', "aantalperiodes", default=False, key='_vier_'), sg.Radio('7', "aantalperiodes", default=True, key='_zeven_'), sg.Radio('14', "aantalperiodes", default=False, key='_veertien_'), sg.Radio('onbeperkt', "aantalperiodes", default=False, key='_onbeperkt_')] ]
+    periodeLayout = [ [ sg.Text('periodes (dagen/weken/maanden): '), sg.Push(), sg.Radio('4', "aantalperiodes", default=False, key='_vier_'), sg.Radio('7', "aantalperiodes", default=True, key='_zeven_'), sg.Radio('12', "aantalperiodes", default=False, key='_twaalf_'), sg.Radio('14', "aantalperiodes", default=False, key='_veertien_'), sg.Radio('30', "aantalperiodes", default=False, key='_dertig_'), sg.Radio('onbeperkt', "aantalperiodes", default=False, key='_onbeperkt_')] ]
     # Create a 7, 14, unlimited day layout
-    dagenLayout = [ [ sg.Button('Verbruik per dag'), sg.Text('aantal: '),sg.Radio('7', "aantaldagen", default=True, key='_zeven_'), sg.Radio('14', "aantaldagen", default=False, key='_veertien_'), sg.Radio('onbeperkt', "aantaldagen", default=False, key='_onbeperkt_')] ]
+    dagenLayout = [ [ sg.Button('Verbruik per dag'), sg.Text('aantal: '),sg.Radio('7', "aantaldagen", default=True, key='_zeven_'), sg.Radio('14', "aantaldagen", default=False, key='_veertien_'), sg.Radio('30', "aantaldagen", default=False, key='_dertig_'), sg.Radio('onbeperkt', "aantaldagen", default=False, key='_onbeperkt_')] ]
     # create a layout for an overview per type: used, produced, gas
-    typelayout = [ [ sg.Text('periodes (dagen/weken/maanden): '), sg.Radio('Verbruikt/Geproduceerd/Gas', 'type', default=True, key='t_alles'), sg.Radio('Verbruikt/Geproduceerd', 'type', default=False, key='t_electrisch'), sg.Radio('Verbruikt', 'type', default=False, key='t_verbruikt'), sg.Radio('Geproduceerd', 'type', default=False, key='t_geproduceerd'), sg.Radio('Gas verbruik', 'type', default=False, key='t_gasverbruik') ]]
+    typelayout = [ [ sg.Radio('Verbruikt/Geproduceerd/Gas', 'type', default=True, key='t_alles'), sg.Radio('Verbruikt/Geproduceerd', 'type', default=False, key='t_electrisch'), sg.Radio('Verbruikt', 'type', default=False, key='t_verbruikt'), sg.Radio('Geproduceerd', 'type', default=False, key='t_geproduceerd'), sg.Radio('Gas verbruik', 'type', default=False, key='t_gasverbruik') ]]
+    # Combine both periode and type layout into one
+    optiesLayout = [ [ sg.Text('periodes (dagen/weken/maanden): ', font = ('any', 10, 'bold')), sg.Push(), sg.Radio('4', "aantalperiodes", default=False, key='_vier_'), sg.Radio('7', "aantalperiodes", default=True, key='_zeven_'), sg.Radio('12', "aantalperiodes", default=False, key='_twaalf_'), sg.Radio('14', "aantalperiodes", default=False, key='_veertien_'), sg.Radio('30', "aantalperiodes", default=False, key='_dertig_'), sg.Radio('onbeperkt', "aantalperiodes", default=False, key='_onbeperkt_')],
+                     [ sg.Text('Type grafiek:', font = ('any', 10, 'bold')), sg.Radio('Verbruikt/Geproduceerd/Gas', 'type', default=True, key='t_alles'), sg.Radio('Verbruikt/Geproduceerd', 'type', default=False, key='t_electrisch'), sg.Radio('Verbruikt', 'type', default=False, key='t_verbruikt'), sg.Radio('Geproduceerd', 'type', default=False, key='t_geproduceerd'), sg.Radio('Gas verbruik', 'type', default=False, key='t_gasverbruik') ],
+                   ]
+    optiesFrameLayout = [ [sg.Frame('', optiesLayout) ] ]
+    optiesTextLayout = [ [sg.Text('Selectie opties', font = ('any', 12, 'bold')),] ]
 
     mainLayout = [ [sg.Text('Stroomverbruik', font = ('any', 12, 'bold')), sg.Button('Vandaag'), sg.CalendarButton('Op datum', key='_CALENDAR_', target='-CAL-', format=( '%Y-%m-%d'),locale='nl_NL',), sg.Text('Gasverbruik', font = ('any', 12, 'bold')), sg.Button('Vandaag', key='_gasvandaag_'), sg.CalendarButton('Op datum', key='_GCALENDAR_', target='-GCAL-', format=( '%Y-%m-%d'),locale='nl_NL',),],
-                   [sg.Text('Overzichten', font=('any', 12, 'bold')), sg.Button('Per dag'), sg.Button('Per week'), sg.Button('Per maand'), sg.Frame('', periodeLayout), ],
-                   [sg.Text('Overzicht per type', font = ('any', 12, 'bold')), sg.Frame('', typelayout)],
-               [sg.Text('Diagram type Verbruiks Overzichten', font = ('any', 12, 'bold')), sg.Radio('Staafdiagram', "grafiektype", default=True, key='_staaf_'), sg.Radio('Lijndiagram', "grafiektype", default=False, key='_lijn_'), sg.Push(), sg.Button('Sluiten', button_color=('white', 'firebrick3'))],
+                   [sg.Text('Overzichten', font=('any', 12, 'bold')), sg.Button('Per dag'), sg.Button('Per week'), sg.Button('Per maand'), ],
+                   #[sg.Text('Selectie opties', font = ('any', 12, 'bold')), sg.Push(), sg.Frame('', periodeLayout),],
+                   #[sg.Push(), sg.Frame('', typelayout) ],
+                   [sg.Column(optiesTextLayout, vertical_alignment='top'), sg.Push(), sg.Column(optiesFrameLayout,  vertical_alignment='top')],
+               [sg.Text('Diagram type Verbruiks Overzichten', font = ('any', 12, 'bold')), sg.Radio('Staafdiagram', "grafiektype", default=True, key='_staaf_'), sg.Radio('Lijndiagram', "grafiektype", default=False, key='_lijn_'), sg.Push(), sg.Button('Programma afsluiten', button_color=('white', 'firebrick3'))],
                #[sg.Text('', key='_progress_msg')],
                [sg.In(key='-CAL-', enable_events=True, visible=False), sg.In(key='-GCAL-', enable_events=True, visible=False)],
                [sg.TabGroup([[sg.Tab('Grafiek', layoutPlotTab, key='_PlotTab_'),

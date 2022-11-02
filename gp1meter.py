@@ -59,23 +59,29 @@ window =  ui_layout.create_and_show_gui()
 while True:
     event, values = window.read()
     print(event, values)
-    if event == sg.WIN_CLOSED or event == 'Sluiten': # if user closes window or clicks Sluiten
+    if event == sg.WIN_CLOSED or event == 'Programma afsluiten': # if user closes window or clicks Sluiten
         connection.close()
         break
     elif event == 'Per dag':
         do_query(window, q.q_verbruik)
         data = pandas.read_sql(q.q_verbruik, connection)
         if (values['_vier_']):
-            # last 4 days
+            # last 4 periods
             mpgraphs.verbruik_per_dag(window, data.tail(4), values)
         elif (values['_zeven_']):
-            # last 7 days
+            # last 7 periods
             mpgraphs.verbruik_per_dag(window, data.tail(7), values)
+        elif (values['_twaalf_']):
+            # last 12 periods
+            mpgraphs.verbruik_per_dag(window, data.tail(12), values)
         elif (values['_veertien_']):
-            # last 14 days
+            # last 14 periods
             mpgraphs.verbruik_per_dag(window, data.tail(14), values)
+        elif (values['_dertig_']):
+            # last 30 periods
+            mpgraphs.verbruik_per_dag(window, data.tail(30), values)
         else:
-            # all days so far
+            # all periods so far
             mpgraphs.verbruik_per_dag(window, data, values)
         #window.refresh()
     elif event == 'Vandaag':
