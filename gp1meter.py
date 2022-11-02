@@ -62,10 +62,13 @@ while True:
     if event == sg.WIN_CLOSED or event == 'Sluiten': # if user closes window or clicks Sluiten
         connection.close()
         break
-    elif event == 'Verbruik per dag':
+    elif event == 'Per dag':
         do_query(window, q.q_verbruik)
         data = pandas.read_sql(q.q_verbruik, connection)
-        if (values['_zeven_']):
+        if (values['_vier_']):
+            # last 4 days
+            mpgraphs.verbruik_per_dag(window, data.tail(4), values)
+        elif (values['_zeven_']):
             # last 7 days
             mpgraphs.verbruik_per_dag(window, data.tail(7), values)
         elif (values['_veertien_']):
@@ -96,20 +99,20 @@ while True:
         do_query(window, myquery)
         data = pandas.read_sql(myquery, connection)
         mpgraphs.netto_per_dag(window, data, values, "gas")
-    elif event == 'Verbruik per week':
+    elif event == 'Per week':
         do_query(window, q.q_verbruik_per_week)
         data = pandas.read_sql(q.q_verbruik_per_week, connection)
         mpgraphs.verbruik_per_week(window, data, values)
-    elif event == 'Verbruik per maand':
+    elif event == 'Per maand':
         do_query(window, q.q_verbruik_per_maand)
         data = pandas.read_sql(q.q_verbruik_per_maand, connection)
         mpgraphs.verbruik_per_maand(window, data, values)
     elif event == 'Gescheiden vandaag':
-        do_query(window, q_gescheiden_per_dag)
+        do_query(window, q.q_gescheiden_per_dag)
         data = pandas.read_sql(q.q_gescheiden_per_dag, connection)
         mpgraphs.gescheiden_per_dag(window, data, values)
     elif event == 'Dagelijkse totalen':
-        do_query(window, q_daily)
+        do_query(window, q.q_daily)
         data = pandas.read_sql(q.q_daily, connection)
         mpgraphs.daily_totals(window, data)
     # For all selected buttons

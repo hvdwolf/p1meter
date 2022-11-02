@@ -47,14 +47,27 @@ class Toolbar(NavigationToolbar2Tk):
         super(Toolbar, self).__init__(*args, **kwargs)
 
 
-# function to add value labels
+# 3 functions to add value labels
 # This will add the value of import, export and m3 to the top of the bar
-def addlabels(bar1,bar2, bar3):
+def add3labels(bar1,bar2, bar3):
 
     for rect in bar1 + bar2 + bar3:
         height = rect.get_height()
         plt.text(rect.get_x() + rect.get_width() / 2.0, height, f'{height:.1f}', ha='center', va='bottom')
 
+# This will add the value of import and exportto the top of the bar
+def add2labels(bar1,bar2):
+
+    for rect in bar1 + bar2:
+        height = rect.get_height()
+        plt.text(rect.get_x() + rect.get_width() / 2.0, height, f'{height:.1f}', ha='center', va='bottom')
+
+# This will add the value of the chosen option to the top of the bar
+def addlabel(bar1):
+
+    for rect in bar1:
+        height = rect.get_height()
+        plt.text(rect.get_x() + rect.get_width() / 2.0, height, f'{height:.1f}', ha='center', va='bottom')
 
 
 # ------------------------------- Graphs for values
@@ -116,7 +129,7 @@ def netto_per_dag(window, data, all_values, type):
     # Define the labels
     time_labels = ["00:00", "02:00", "04:00", "06:00", "08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00", "24:00"]
     plt.xlim(0, 240)  # Defines the limit of your x-axis
-    plt.xticks(time_stamps, labels=time_labels, rotation='30')  # Adapts the x-axis scale and labels
+    plt.xticks(time_stamps, labels=time_labels, rotation=30)  # Adapts the x-axis scale and labels
 
 
     DPI = fig.get_dpi()
@@ -166,22 +179,45 @@ def verbruik_per_dag(window, data, all_values):
     plt.clf()
     X_axis = np.arange(len(data.dagdatum))
     if (all_values['_staaf_']):
-        imp = plt.bar(X_axis - 0.15, data.importkwh, color = 'm', width = 0.15, label = 'kWh verbruikt')
-        exp = plt.bar(X_axis, data.exportkwh, color = 'g', width = 0.15, label = 'kWh (zon)geleverd')
-        m3 = plt.bar(X_axis + 0.15, data.gastotaalm3, color = 'r', width = 0.15, label = 'm3 gas verbruikt')
-        addlabels(imp, exp, m3)
-    else:
+        if (all_values['t_alles']):
+            imp = plt.bar(X_axis - 0.2, data.importkwh, color = 'm', width = 0.2, label = 'kWh verbruikt')
+            exp = plt.bar(X_axis, data.exportkwh, color = 'g', width = 0.2, label = 'kWh (zon)geleverd')
+            m3 = plt.bar(X_axis + 0.2, data.gastotaalm3, color = 'r', width = 0.2, label = 'm3 gas verbruikt')
+            add3labels(imp, exp, m3)
+            plt.ylabel('kWh / m3')
+            plt.title("energie verbruik/geleverd de afgelopen dagen")
+        elif (all_values['t_electrisch']):
+            imp = plt.bar(X_axis - 0.1, data.importkwh, color = 'm', width = 0.2, label = 'kWh verbruikt')
+            exp = plt.bar(X_axis + 0.1, data.exportkwh, color = 'g', width = 0.2, label = 'kWh (zon)geleverd')
+            add2labels(imp, exp)
+            plt.ylabel('kWh')
+            plt.title("energie verbruik/geleverd de afgelopen dagen")
+        elif (all_values['t_verbruikt']):  # verbruikte hoeveelheid kWh
+            imp = plt.bar(X_axis, data.importkwh, color='m', width=0.2, label='kWh verbruikt')
+            addlabel(imp)
+            plt.ylabel('kWh')
+            plt.title("energieverbruik de afgelopen dagen")
+        elif (all_values['t_geproduceerd']): # Geproduceerde hoeveelheid kWh
+            exp = plt.bar(X_axis, data.exportkwh, color='g', width=0.2, label='kWh geproduceerd')
+            addlabel(exp)
+            plt.ylabel('kWh')
+            plt.title("energie geleverd de afgelopen dagen")
+        elif (all_values['t_gasverbruik']):  # Geproduceerde hoeveelheid kWh
+            m3 = plt.bar(X_axis, data.importkwh, color='r', width=0.2, label='m3 verbruikt')
+            addlabel(m3)
+            plt.ylabel('m3')
+            plt.title("gasverbruik de afgelopen dagen")
+    else: # line plot
         imp = plt.plot(X_axis, data.importkwh, 'm-',  label = 'kWh verbruikt')
         exp = plt.plot(X_axis, data.exportkwh, 'g-', label = 'kWh (zon)geleverd')
         m3 = plt.plot(X_axis, data.gastotaalm3, 'r-', label = 'm3 gas verbruikt')
-        #addlabels(imp, exp, m3)
+        add3labels(imp, exp, m3)
+        plt.ylabel('kWh / m3')
 
     plt.grid(axis='y', linestyle='--')
     plt.xticks(X_axis, data.dagdatum, rotation=30)
     plt.xlabel('weekdagen')
-    plt.ylabel('kWh / m3')
     plt.legend(loc='upper right')
-    plt.title("energie verbruik/geleverd de afgelopen dagen")
     fig = plt.gcf()
     DPI = fig.get_dpi()
     # ------------------------------- you have to play with this size to reduce the movement error when the mouse hovers over the figure, it's close to canvas size
@@ -197,17 +233,41 @@ def verbruik_per_week(window, data, all_values):
     #X_axis = np.arange(len(data.weekno))
     X_axis = np.arange(len(data.wknrdatum))
     #print(data.wknrdatum)
-    bar1 = plt.bar(X_axis - 0.15, data.importkwh, color = 'm', width = 0.15, label = 'Import kWh')
-    bar2 = plt.bar(X_axis, data.exportkwh, color = 'g', width = 0.15, label = 'Export kWh')
-    bar3 = plt.bar(X_axis + 0.15, data.gastotaalm3, color = 'r', width = 0.15, label = 'gas m3')
-    addlabels(bar1, bar2, bar3)
+    if (all_values['t_alles']):
+        imp = plt.bar(X_axis - 0.2, data.importkwh, color = 'm', width = 0.2, label = 'Import kWh')
+        exp = plt.bar(X_axis, data.exportkwh, color = 'g', width = 0.2, label = 'Export kWh')
+        m3 = plt.bar(X_axis + 0.2, data.gastotaalm3, color = 'r', width = 0.2, label = 'gas m3')
+        add3labels(imp, exp, m3)
+        plt.ylabel('kWh / m3')
+        plt.legend((imp, exp, m3), ('kWh verbruikt', 'kWh (zon)geleverd', 'm3 gas verbruikt'))
+        plt.title("energie verbruik/geleverd de afgelopen weken")
+    elif (all_values['t_electrisch']):
+        imp = plt.bar(X_axis - 0.1, data.importkwh, color='m', width=0.2, label='kWh verbruikt')
+        exp = plt.bar(X_axis + 0.1, data.exportkwh, color='g', width=0.2, label='kWh (zon)geleverd')
+        add2labels(imp, exp)
+        plt.ylabel('kWh')
+        plt.title("energie verbruik/geleverd de afgelopen weken")
+    elif (all_values['t_verbruikt']):  # verbruikte hoeveelheid kWh
+        imp = plt.bar(X_axis, data.importkwh, color='m', width=0.2, label='kWh verbruikt')
+        addlabel(imp)
+        plt.ylabel('kWh')
+        plt.title("energieverbruik de afgelopen weken")
+    elif (all_values['t_geproduceerd']): # Geproduceerde hoeveelheid kWh
+        exp = plt.bar(X_axis, data.exportkwh, color='g', width=0.2, label='kWh geproduceerd')
+        addlabel(exp)
+        plt.ylabel('kWh')
+        plt.title("energie geleverd de afgelopen weken")
+    elif (all_values['t_gasverbruik']):  # Geproduceerde hoeveelheid kWh
+        m3 = plt.bar(X_axis, data.importkwh, color='r', width=0.2, label='m3 verbruikt')
+        addlabel(m3)
+        plt.ylabel('m3')
+        plt.title("gasverbruik de afgelopen weken")
+
     plt.grid(axis='y', linestyle='--')
     #plt.xticks(X_axis, data.weekno)
     plt.xticks(X_axis, data.wknrdatum)
     plt.xlabel('weeknummers (datum)')
-    plt.ylabel('kWh / m3')
-    plt.legend( (bar1, bar2, bar3), ('kWh verbruikt', 'kWh (zon)geleverd', 'm3 gas verbruikt') )
-    plt.title("energie verbruik/geleverd de afgelopen weken")
+
     fig = plt.gcf()
     DPI = fig.get_dpi()
     # ------------------------------- you have to play with this size to reduce the movement error when the mouse hovers over the figure, it's close to canvas size
@@ -222,16 +282,46 @@ def verbruik_per_maand(window, data, all_values):
     fig = plt.gcf()
     plt.clf()
     X_axis = np.arange(len(data.month_name))
-    bar1 = plt.bar(X_axis - 0.15, data.importkwh, color = 'm', width = 0.15, label = 'Import kWh')
-    bar2 = plt.bar(X_axis, data.exportkwh, color = 'g', width = 0.15, label = 'Export kWh')
-    bar3 = plt.bar(X_axis + 0.15, data.gastotaalm3, color = 'r', width = 0.15, label = 'gas m3')
-    addlabels(bar1, bar2, bar3)
+    if (all_values['t_alles']):
+        imp = plt.bar(X_axis - 0.2, data.importkwh, color = 'm', width = 0.2, label = 'Import kWh')
+        exp = plt.bar(X_axis, data.exportkwh, color = 'g', width = 0.2, label = 'Export kWh')
+        m3 = plt.bar(X_axis + 0.2, data.gastotaalm3, color = 'r', width = 0.2, label = 'gas m3')
+        add3labels(imp, exp, m3)
+        plt.ylabel('kWh / m3')
+        plt.legend((imp, exp, m3), ('kWh verbruikt', 'kWh (zon)geleverd', 'm3 gas verbruikt'))
+        plt.title("energie verbruik/geleverd de afgelopen maanden")
+    elif (all_values['t_electrisch']):
+        imp = plt.bar(X_axis - 0.1, data.importkwh, color='m', width=0.2, label='kWh verbruikt')
+        exp = plt.bar(X_axis + 0.1, data.exportkwh, color='g', width=0.2, label='kWh (zon)geleverd')
+        add2labels(imp, exp)
+        plt.ylabel('kWh')
+        plt.legend((imp, exp), ('kWh verbruikt', 'kWh (zon)geleverd'))
+        plt.title("energie verbruik/geleverd de afgelopen maanden")
+    elif (all_values['t_verbruikt']):  # verbruikte hoeveelheid kWh
+        imp = plt.bar(X_axis, data.importkwh, color='m', width=0.2, label='kWh verbruikt')
+        addlabel(imp)
+        plt.ylabel('kWh')
+        plt.legend((imp), ('kWh verbruikt'))
+        #plt.legend(loc='upper right')
+        plt.title("energieverbruik de afgelopen maanden")
+    elif (all_values['t_geproduceerd']): # Geproduceerde hoeveelheid kWh
+        exp = plt.bar(X_axis, data.exportkwh, color='g', width=0.2, label='kWh geproduceerd')
+        addlabel(exp)
+        plt.ylabel('kWh')
+        plt.legend((exp), ('kWh (zon)geleverd'))
+        plt.title("energieproductie de afgelopen maanden")
+    elif (all_values['t_gasverbruik']):  # Geproduceerde hoeveelheid kWh
+        m3 = plt.bar(X_axis, data.importkwh, color='r', width=0.2, label='m3 verbruikt')
+        addlabel(m3)
+        plt.ylabel('m3')
+        plt.legend((m3), ('m3 gasverbruik'))
+        plt.title("gasverbruik de afgelopen maanden")
     plt.grid(axis='y', linestyle='--')
     #plt.xticks(X_axis, data.weekno)
     plt.xticks(X_axis, data.month_name)
     plt.xlabel('maandnummers (maand)')
     plt.ylabel('kWh / m3')
-    plt.legend( (bar1, bar2, bar3), ('kWh verbruikt', 'kWh (zon)geleverd', 'm3 gas verbruikt') )
+
     plt.title("energie verbruik/geleverd de afgelopen maanden")
     fig = plt.gcf()
     DPI = fig.get_dpi()
