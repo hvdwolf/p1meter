@@ -41,6 +41,26 @@ def do_query(window, myquery):
 DB_file = config.sqlite3_DB_file
 
 
+# Return number of periods, be it days/weeks/months
+
+def get_periodes(values):
+    aantal = 99999
+
+    if (values['_vier_']):
+        aantal = 4
+    elif (values['_zeven_']):
+        aantal = 7
+    elif (values['_twaalf_']):
+        aantal = 12
+    elif (values['_veertien_']):
+        aantal = 14
+    elif (values['_dertig_']):
+        aantal = 30
+    else:
+        aantal = 9999
+
+    return aantal
+
 
 # --------------------------- Start our script
 # Check for the database
@@ -65,25 +85,7 @@ while True:
     elif event == 'Per dag':
         do_query(window, q.q_verbruik)
         data = pandas.read_sql(q.q_verbruik, connection)
-        if (values['_vier_']):
-            # last 4 periods
-            mpgraphs.verbruik_per_dag(window, data.tail(4), values)
-        elif (values['_zeven_']):
-            # last 7 periods
-            mpgraphs.verbruik_per_dag(window, data.tail(7), values)
-        elif (values['_twaalf_']):
-            # last 12 periods
-            mpgraphs.verbruik_per_dag(window, data.tail(12), values)
-        elif (values['_veertien_']):
-            # last 14 periods
-            mpgraphs.verbruik_per_dag(window, data.tail(14), values)
-        elif (values['_dertig_']):
-            # last 30 periods
-            mpgraphs.verbruik_per_dag(window, data.tail(30), values)
-        else:
-            # all periods so far
-            mpgraphs.verbruik_per_dag(window, data, values)
-        #window.refresh()
+        mpgraphs.verbruik_per_dag(window, data.tail(get_periodes(values)), values)
     elif event == 'Vandaag':
         #print(date())
         do_query(window, q.q_netto_per_dag)
@@ -108,11 +110,11 @@ while True:
     elif event == 'Per week':
         do_query(window, q.q_verbruik_per_week)
         data = pandas.read_sql(q.q_verbruik_per_week, connection)
-        mpgraphs.verbruik_per_week(window, data, values)
+        mpgraphs.verbruik_per_week(window, data.tail(get_periodes(values)), values)
     elif event == 'Per maand':
         do_query(window, q.q_verbruik_per_maand)
         data = pandas.read_sql(q.q_verbruik_per_maand, connection)
-        mpgraphs.verbruik_per_maand(window, data, values)
+        mpgraphs.verbruik_per_maand(window, data.tail(get_periodes(values)), values)
     elif event == 'Gescheiden vandaag':
         do_query(window, q.q_gescheiden_per_dag)
         data = pandas.read_sql(q.q_gescheiden_per_dag, connection)
