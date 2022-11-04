@@ -70,13 +70,13 @@ def get_values(periodes, grafiektype):
         values.update({'_vier_': True})
     elif (periodes == '7'):
         values.update({'_zeven_': True})
-    elif (periodes == 12):
+    elif (periodes == '12'):
         values.update({'_twaalf_': True})
     elif (periodes == '14'):
         values.update({'_veertien_': True})
     elif (periodes == '30'):
         values.update({'_dertig_': True})
-    elif (periodes == 9999):
+    elif (periodes == '9999'):
         values.update({'_onbeperkt_': True})
     else:  # if everthing fails, go for a default
         values.update({'_zeven_': True})
