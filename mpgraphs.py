@@ -14,11 +14,9 @@
 # the GNU General Public Licence for more details.
 
 
-import sqlite3
 import pandas, matplotlib.pyplot as plt, matplotlib.dates as md, numpy as np
-from datetime import date
+import time
 from datetime import datetime
-from datetime import timedelta
 import locale
 
 # Sizes for our canvas and mathplots. These values need to be the same in mpgraphs.py and ui_layout.py
@@ -99,8 +97,10 @@ def plot_chart(all_values, X_axis, data, disp_optie):
             plt.ylabel('m3')
             plt.title("gasverbruik de afgelopen " + disp_optie)
 
+        #plt.savefig('pipo.png')
+
 # ------------------------------- Graphs for values
-def netto_per_dag(window, data, all_values, type):
+def netto_per_dag(window, data, all_values, type, WEB=False):
     #Get current plot/figure and clear it
     fig = plt.gcf()
     plt.clf()
@@ -160,7 +160,6 @@ def netto_per_dag(window, data, all_values, type):
     plt.xlim(0, 240)  # Defines the limit of your x-axis
     plt.xticks(time_stamps, labels=time_labels, rotation=30)  # Adapts the x-axis scale and labels
 
-
     DPI = fig.get_dpi()
     # -------- you have to play with this size to reduce the movement error when the mouse hovers over the figure, it's close to canvas size
     fig.set_size_inches(gr_width / float(DPI), gr_height / float(DPI))
@@ -201,7 +200,7 @@ def gescheiden_per_dag(window, data, all_values):
     # ------------------------------- Instead of plt.show()
     draw_figure_w_toolbar(window['fig_cv'].TKCanvas, fig, window['controls_cv'].TKCanvas)
 
-def verbruik_per_dag(window, data, all_values):
+def verbruik_per_dag(window, data, all_values, WEB=False):
     #print(all_values)
     #Get current plot/figure and clear it
     fig = plt.gcf()
@@ -213,15 +212,21 @@ def verbruik_per_dag(window, data, all_values):
     plt.xticks(X_axis, data.dagdatum, rotation=30)
     plt.xlabel('weekdagen')
     plt.legend(loc='upper right')
-    fig = plt.gcf()
-    DPI = fig.get_dpi()
-    # ------------------------------- you have to play with this size to reduce the movement error when the mouse hovers over the figure, it's close to canvas size
-    fig.set_size_inches(gr_width / float(DPI), gr_height / float(DPI))
-    #plt.show()
-    # ------------------------------- Instead of plt.show()
-    draw_figure_w_toolbar(window['fig_cv'].TKCanvas, fig, window['controls_cv'].TKCanvas)
+    # WEB is used in the webscripts and on the pc always False
+    if WEB:
+        ts = str(time.time()).split(".")
+        plt.savefig((ts[0]) + '.png', dpi=150)
+    else:
+        fig = plt.gcf()
+        DPI = fig.get_dpi()
+        # ------------------------------- you have to play with this size to reduce the movement error when the mouse hovers over the figure, it's close to canvas size
+        fig.set_size_inches(gr_width / float(DPI), gr_height / float(DPI))
+        #plt.show()
+        # ------------------------------- Instead of plt.show()
+        draw_figure_w_toolbar(window['fig_cv'].TKCanvas, fig, window['controls_cv'].TKCanvas)
 
-def verbruik_per_week(window, data, all_values):
+
+def verbruik_per_week(window, data, all_values, WEB=False):
     #Get current plot/figure and clear it
     fig = plt.gcf()
     plt.clf()
@@ -229,105 +234,52 @@ def verbruik_per_week(window, data, all_values):
     X_axis = np.arange(len(data.wknrdatum))
     #print(data.wknrdatum)
     plot_chart(all_values, X_axis, data, "weken")
-    """
-    if (all_values['t_alles']):
-        imp = plt.bar(X_axis - 0.2, data.importkwh, color = 'm', width = 0.2, label = 'Import kWh')
-        exp = plt.bar(X_axis, data.exportkwh, color = 'g', width = 0.2, label = 'Export kWh')
-        m3 = plt.bar(X_axis + 0.2, data.gastotaalm3, color = 'r', width = 0.2, label = 'gas m3')
-        add3labels(imp, exp, m3)
-        plt.ylabel('kWh / m3')
-        plt.legend((imp, exp, m3), ('kWh verbruikt', 'kWh (zon)geleverd', 'm3 gas verbruikt'))
-        plt.title("energie verbruik/geleverd de afgelopen weken")
-    elif (all_values['t_electrisch']):
-        imp = plt.bar(X_axis - 0.1, data.importkwh, color='m', width=0.2, label='kWh verbruikt')
-        exp = plt.bar(X_axis + 0.1, data.exportkwh, color='g', width=0.2, label='kWh (zon)geleverd')
-        add2labels(imp, exp)
-        plt.ylabel('kWh')
-        plt.title("energie verbruik/geleverd de afgelopen weken")
-    elif (all_values['t_verbruikt']):  # verbruikte hoeveelheid kWh
-        imp = plt.bar(X_axis, data.importkwh, color='m', width=0.2, label='kWh verbruikt')
-        addlabel(imp)
-        plt.ylabel('kWh')
-        plt.title("energieverbruik de afgelopen weken")
-    elif (all_values['t_geproduceerd']): # Geproduceerde hoeveelheid kWh
-        exp = plt.bar(X_axis, data.exportkwh, color='g', width=0.2, label='kWh geproduceerd')
-        addlabel(exp)
-        plt.ylabel('kWh')
-        plt.title("energie geleverd de afgelopen weken")
-    elif (all_values['t_gasverbruik']):  # Geproduceerde hoeveelheid kWh
-        m3 = plt.bar(X_axis, data.importkwh, color='r', width=0.2, label='m3 verbruikt')
-        addlabel(m3)
-        plt.ylabel('m3')
-        plt.title("gasverbruik de afgelopen weken")
 
-    """
     plt.grid(axis='y', linestyle='--')
     #plt.xticks(X_axis, data.weekno)
     plt.xticks(X_axis, data.wknrdatum)
     plt.xlabel('weeknummers (datum)')
+    # WEB is used in the webscripts and on the pc always False
+    if WEB:
+        ts = str(time.time()).split(".")
+        plt.savefig((ts[0]) + '.png', dpi=150)
+    else:
+        fig = plt.gcf()
+        DPI = fig.get_dpi()
+        # ------------------------------- you have to play with this size to reduce the movement error when the mouse hovers over the figure, it's close to canvas size
+        fig.set_size_inches(gr_width / float(DPI), gr_height / float(DPI))
+        # plt.show()
+        # ------------------------------- Instead of plt.show()
+        draw_figure_w_toolbar(window['fig_cv'].TKCanvas, fig, window['controls_cv'].TKCanvas)
 
-    fig = plt.gcf()
-    DPI = fig.get_dpi()
-    # ------------------------------- you have to play with this size to reduce the movement error when the mouse hovers over the figure, it's close to canvas size
-    fig.set_size_inches(gr_width / float(DPI), gr_height / float(DPI))
-    #plt.show()
-    # ------------------------------- Instead of plt.show()
-    draw_figure_w_toolbar(window['fig_cv'].TKCanvas, fig, window['controls_cv'].TKCanvas)
 
-
-def verbruik_per_maand(window, data, all_values):
+def verbruik_per_maand(window, data, all_values, WEB=False):
     #Get current plot/figure and clear it
     fig = plt.gcf()
     plt.clf()
     X_axis = np.arange(len(data.month_name))
-    if (all_values['t_alles']):
-        imp = plt.bar(X_axis - 0.2, data.importkwh, color = 'm', width = 0.2, label = 'Import kWh')
-        exp = plt.bar(X_axis, data.exportkwh, color = 'g', width = 0.2, label = 'Export kWh')
-        m3 = plt.bar(X_axis + 0.2, data.gastotaalm3, color = 'r', width = 0.2, label = 'gas m3')
-        add3labels(imp, exp, m3)
-        plt.ylabel('kWh / m3')
-        plt.legend((imp, exp, m3), ('kWh verbruikt', 'kWh (zon)geleverd', 'm3 gas verbruikt'))
-        plt.title("energie verbruik/geleverd de afgelopen maanden")
-    elif (all_values['t_electrisch']):
-        imp = plt.bar(X_axis - 0.1, data.importkwh, color='m', width=0.2, label='kWh verbruikt')
-        exp = plt.bar(X_axis + 0.1, data.exportkwh, color='g', width=0.2, label='kWh (zon)geleverd')
-        add2labels(imp, exp)
-        plt.ylabel('kWh')
-        plt.legend((imp, exp), ('kWh verbruikt', 'kWh (zon)geleverd'))
-        plt.title("energie verbruik/geleverd de afgelopen maanden")
-    elif (all_values['t_verbruikt']):  # verbruikte hoeveelheid kWh
-        imp = plt.bar(X_axis, data.importkwh, color='m', width=0.2, label='kWh verbruikt')
-        addlabel(imp)
-        plt.ylabel('kWh')
-        plt.legend((imp), ('kWh verbruikt'))
-        #plt.legend(loc='upper right')
-        plt.title("energieverbruik de afgelopen maanden")
-    elif (all_values['t_geproduceerd']): # Geproduceerde hoeveelheid kWh
-        exp = plt.bar(X_axis, data.exportkwh, color='g', width=0.2, label='kWh geproduceerd')
-        addlabel(exp)
-        plt.ylabel('kWh')
-        plt.legend((exp), ('kWh (zon)geleverd'))
-        plt.title("energieproductie de afgelopen maanden")
-    elif (all_values['t_gasverbruik']):  # Geproduceerde hoeveelheid kWh
-        m3 = plt.bar(X_axis, data.importkwh, color='r', width=0.2, label='m3 verbruikt')
-        addlabel(m3)
-        plt.ylabel('m3')
-        plt.legend((m3), ('m3 gasverbruik'))
-        plt.title("gasverbruik de afgelopen maanden")
+
+    plot_chart(all_values, X_axis, data, "maanden")
     plt.grid(axis='y', linestyle='--')
     #plt.xticks(X_axis, data.weekno)
     plt.xticks(X_axis, data.month_name)
     plt.xlabel('maandnummers (maand)')
-    plt.ylabel('kWh / m3')
+    #plt.ylabel('kWh / m3')
 
-    plt.title("energie verbruik/geleverd de afgelopen maanden")
-    fig = plt.gcf()
-    DPI = fig.get_dpi()
-    # ------------------------------- you have to play with this size to reduce the movement error when the mouse hovers over the figure, it's close to canvas size
-    fig.set_size_inches(gr_width / float(DPI), gr_height / float(DPI))
-    #plt.show()
-    # ------------------------------- Instead of plt.show()
-    draw_figure_w_toolbar(window['fig_cv'].TKCanvas, fig, window['controls_cv'].TKCanvas)  
+    # WEB is used in the webscripts and on the pc always False
+    if WEB:
+        ts = str(time.time()).split(".")
+        plt.savefig((ts[0]) + '.png', dpi=150)
+    else:
+        # plt.title("energie verbruik/geleverd de afgelopen maanden")
+        fig = plt.gcf()
+        DPI = fig.get_dpi()
+        # ------------------------------- you have to play with this size to reduce the movement error when the mouse hovers over the figure, it's close to canvas size
+        fig.set_size_inches(gr_width / float(DPI), gr_height / float(DPI))
+        # plt.show()
+        # ------------------------------- Instead of plt.show()
+        draw_figure_w_toolbar(window['fig_cv'].TKCanvas, fig, window['controls_cv'].TKCanvas)
+
 
 def daily_totals(window, data):
     #Get current plot/figure and clear it

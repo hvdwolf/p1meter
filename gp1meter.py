@@ -42,9 +42,7 @@ DB_file = config.sqlite3_DB_file
 
 
 # Return number of periods, be it days/weeks/months
-
 def get_periodes(values):
-    aantal = 99999
 
     if (values['_vier_']):
         aantal = 4
