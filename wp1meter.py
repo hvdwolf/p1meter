@@ -17,6 +17,7 @@
 import PySimpleGUI as sg
 import os.path, sys, sqlite3
 import pandas
+import glob
 from datetime import date
 from datetime import timedelta
 
@@ -130,14 +131,23 @@ cursor = connection.cursor()
 event = sys.argv[1]
 periodes = sys.argv[2]
 grafiektype = sys.argv[3]
+global PNG
 # Window was a pysimplegui array
 window = [[]]
 
+# Remove old png files
+fileList = glob.glob('/var/www/html/tmp/*.png')
+for filePath in fileList:
+    try:
+        os.remove(filePath)
+    except:
+        print("Error while deleting file : ", filePath)
+
 values = get_values(periodes, grafiektype)
-print(event, values)
+#print(event, values)
 if event == 'Per dag':
     data = pandas.read_sql(q.q_verbruik, connection)
-    mpgraphs.verbruik_per_dag(window, data.tail(get_periodes(values)), values, True)
+    PNG = mpgraphs.verbruik_per_dag(window, data.tail(get_periodes(values)), values, True)
 elif event == 'Vandaag':
     data = pandas.read_sql(q.q_netto_per_dag, connection)
     mpgraphs.netto_per_dag(window, data, values, "el")
@@ -156,13 +166,15 @@ elif event == '-GCAL-':
     mpgraphs.netto_per_dag(window, data, values, "gas")
 elif event == 'Per week':
     data = pandas.read_sql(q.q_verbruik_per_week, connection)
-    mpgraphs.verbruik_per_week(window, data.tail(get_periodes(values)), values, True)
+    PNG = mpgraphs.verbruik_per_week(window, data.tail(get_periodes(values)), values, True)
 elif event == 'Per maand':
     data = pandas.read_sql(q.q_verbruik_per_maand, connection)
-    mpgraphs.verbruik_per_maand(window, data.tail(get_periodes(values)), values, True)
+    PNG = mpgraphs.verbruik_per_maand(window, data.tail(get_periodes(values)), values, True)
 elif event == 'Gescheiden vandaag':
     data = pandas.read_sql(q.q_gescheiden_per_dag, connection)
     mpgraphs.gescheiden_per_dag(window, data, values)
 elif event == 'Dagelijkse totalen':
     data = pandas.read_sql(q.q_daily, connection)
     mpgraphs.daily_totals(window, data)
+
+print(PNG) 

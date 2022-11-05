@@ -23,6 +23,8 @@ import locale
 gr_width = 450*3
 gr_height = 808
 
+# Dir to save our "figs" to
+savedir = "/var/www/html/tmp/"
 
 # ------------------------------- This is to include a matplotlib figure in a Tkinter canvas
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
@@ -215,7 +217,9 @@ def verbruik_per_dag(window, data, all_values, WEB=False):
     # WEB is used in the webscripts and on the pc always False
     if WEB:
         ts = str(time.time()).split(".")
-        plt.savefig((ts[0]) + '.png', dpi=150)
+        plt.savefig(savedir + (ts[0]) + '.png', dpi=150)
+        PNG = (ts[0]) + '.png'
+        return PNG
     else:
         fig = plt.gcf()
         DPI = fig.get_dpi()
@@ -224,6 +228,8 @@ def verbruik_per_dag(window, data, all_values, WEB=False):
         #plt.show()
         # ------------------------------- Instead of plt.show()
         draw_figure_w_toolbar(window['fig_cv'].TKCanvas, fig, window['controls_cv'].TKCanvas)
+        PNG = ''
+        return PNG
 
 
 def verbruik_per_week(window, data, all_values, WEB=False):
@@ -242,7 +248,9 @@ def verbruik_per_week(window, data, all_values, WEB=False):
     # WEB is used in the webscripts and on the pc always False
     if WEB:
         ts = str(time.time()).split(".")
-        plt.savefig((ts[0]) + '.png', dpi=150)
+        plt.savefig(savedir + (ts[0]) + '.png', dpi=150)
+        PNG = (ts[0]) + '.png'
+        return PNG
     else:
         fig = plt.gcf()
         DPI = fig.get_dpi()
@@ -251,7 +259,8 @@ def verbruik_per_week(window, data, all_values, WEB=False):
         # plt.show()
         # ------------------------------- Instead of plt.show()
         draw_figure_w_toolbar(window['fig_cv'].TKCanvas, fig, window['controls_cv'].TKCanvas)
-
+        PNG = ''
+        return PNG
 
 def verbruik_per_maand(window, data, all_values, WEB=False):
     #Get current plot/figure and clear it
@@ -269,7 +278,9 @@ def verbruik_per_maand(window, data, all_values, WEB=False):
     # WEB is used in the webscripts and on the pc always False
     if WEB:
         ts = str(time.time()).split(".")
-        plt.savefig((ts[0]) + '.png', dpi=150)
+        plt.savefig(savedir + (ts[0]) + '.png', dpi=150)
+        PNG = (ts[0]) + '.png'
+        return PNG
     else:
         # plt.title("energie verbruik/geleverd de afgelopen maanden")
         fig = plt.gcf()
@@ -279,7 +290,8 @@ def verbruik_per_maand(window, data, all_values, WEB=False):
         # plt.show()
         # ------------------------------- Instead of plt.show()
         draw_figure_w_toolbar(window['fig_cv'].TKCanvas, fig, window['controls_cv'].TKCanvas)
-
+        PNG = ''
+        return PNG
 
 def daily_totals(window, data):
     #Get current plot/figure and clear it
