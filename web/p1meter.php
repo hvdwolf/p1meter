@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Overzicht p1 meter data</title>
 <style>
     body {
@@ -11,31 +13,26 @@
     th, td { padding: 5px; }
 
 </style>
- <script src="/js/jquery-3.6.1.js"></script>
- <script src="/js/jquery-ui.js"></script>
-
- <script>
- $(function() 
- { 
-      $( "#datepicker" ).datepicker({
-      changeMonth:true,
-      changeYear:true,
-      yearRange:"-100:+0",
-      dateFormat:"dd MM yy"
-     });
- });
+<link rel="stylesheet" type="text/css" href="js/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<script>
+  $( function() {
+    $( "#datepicker" ).datepicker({dateFormat:"yy-mm-dd"});
+  } );
 </script>
 
 <link rel="shortcut icon" href="web_images/favicon.ico" >
 </head>
+
 <body>
 <h2>Overzicht p1 meter data</h2>
 <form>
 <strong>Verbruik vandaag</strong>&nbsp;<input type="submit" name="btn_submit" value="Stroom vandaag"/>&nbsp;<input type="submit" name="btn_submit" value="Gas vandaag" />&nbsp;&nbsp;&nbsp;
-<strong>Verbruik op datum</strong>&nbsp;<input type="submit" name="btn_submit" value="Stroom op datum" />&nbsp;<input type="submit" name="btn_submit" value="Gas op datum" /><input type="text" name="txtDate"  id="datepicker" />
-&nbsp;&nbsp;<strong>Overzichten</strong>&nbsp;<input type="submit" name="btn_submit" value="Per dag" /> <input type="submit" name="btn_submit" value="Per week" />&nbsp;<input type="submit" name="btn_submit" value="Per maand" />
+<strong>Verbruik op datum</strong>&nbsp;<input type="submit" name="btn_submit" value="Stroom op datum" />&nbsp;<input type="submit" name="btn_submit" value="Gas op datum" />&nbsp;<input type="text" name="txtDate"  id="datepicker" >
+<p><strong>Overzichten</strong>&nbsp;<input type="submit" name="btn_submit" value="Per dag" /> <input type="submit" name="btn_submit" value="Per week" />&nbsp;<input type="submit" name="btn_submit" value="Per maand" />
 <!-- radio button group periodes -->
-<p><strong>Periodes (dagen/weken/maanden)</strong>
+&nbsp;&nbsp;&nbsp;<strong>Periodes (dagen/weken/maanden)</strong>
 <input type="radio" name="periodes" id="vier" value="4" /><label for="vier">4</label>
 <input type="radio" name="periodes" id="zeven" value="7" checked="checked" /><label for="zeven">7</label>
 <input type="radio" name="periodes" id="twaalf" value="12" /><label for="twaalf">12</label>
