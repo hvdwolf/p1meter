@@ -148,12 +148,12 @@ values = get_values(periodes, grafiektype)
 if event == 'Per dag':
     data = pandas.read_sql(q.q_verbruik, connection)
     PNG = mpgraphs.verbruik_per_dag(window, data.tail(get_periodes(values)), values, True)
-elif event == 'Vandaag':
+elif event == 'Stroom vandaag':
     data = pandas.read_sql(q.q_netto_per_dag, connection)
-    mpgraphs.netto_per_dag(window, data, values, "el")
-elif event == '_gasvandaag_':
+    PNG = mpgraphs.netto_per_dag(window, data, values, "el", True)
+elif event == 'Gas vandaag':
     data = pandas.read_sql(q.q_netto_gas_per_dag, connection)
-    mpgraphs.netto_per_dag(window, data, values, "gas")
+    PNG = mpgraphs.netto_per_dag(window, data, values, "gas", True)
 elif event == '-CAL-':
     myquery = "select timestamp tmstmp, verbruiknuw, importkwh, exportkwh from v_p1data where substr(timestamp,1,10) == '" + \
               values['-CAL-'] + "'"

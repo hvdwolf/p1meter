@@ -4,7 +4,7 @@
 <title>Overzicht p1 meter data</title>
 <style>
     body {
-        width: 65em;
+        width: 85em;
         margin: 0 auto;
         font-family: Tahoma, Verdana, Arial, sans-serif;
     }
@@ -14,12 +14,12 @@
 <link rel="shortcut icon" href="web_images/favicon.ico" >
 </head>
 <body>
-<h1>Overzicht p1 meter data</h1>
+<h2>Overzicht p1 meter data</h2>
 <form>
 <strong>Stroomverbruik</strong>&nbsp;<input type="submit" name="btn_submit" value="Stroom vandaag"/>
 <input type="submit" name="btn_submit" value="Stroom op datum" />&nbsp;&nbsp;&nbsp;
-<strong>Gasverbruik</strong>&nbsp;<input type="submit" name="btn_submit" value="Gas vandaag" /> <input type="submit" name="btn_submit" value="Gas op datum" /><br><br>
-<strong>Overzichten</strong>&nbsp;<input type="submit" name="btn_submit" value="Per dag" /> <input type="submit" name="btn_submit" value="Per week" />&nbsp;<input type="submit" name="btn_submit" value="Per maand" />
+<strong>Gasverbruik</strong>&nbsp;<input type="submit" name="btn_submit" value="Gas vandaag" /> <input type="submit" name="btn_submit" value="Gas op datum" />
+&nbsp;&nbsp;<strong>Overzichten</strong>&nbsp;<input type="submit" name="btn_submit" value="Per dag" /> <input type="submit" name="btn_submit" value="Per week" />&nbsp;<input type="submit" name="btn_submit" value="Per maand" />
 <!-- radio button group periodes -->
 <p><strong>Periodes (dagen/weken/maanden)</strong>
 <input type="radio" name="periodes" id="vier" value="4" /><label for="vier">4</label>
@@ -46,13 +46,7 @@ $output = shell_exec($command);
 //print $output;
 //print("<br>After output");
 
-/*
-$matches = glob('/var/www/html/tmp/*.png');
-foreach ($matches as $PNG) {
-    print $PNG."<br>";
-}
-*/
 ?>
-<img src="<?php echo '/tmp/'.$output; ?>" />
+<p><img src="<?php echo '/tmp/'.$output; ?>" />
 </body>
 </html>

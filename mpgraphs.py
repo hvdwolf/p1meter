@@ -47,6 +47,15 @@ class Toolbar(NavigationToolbar2Tk):
         super(Toolbar, self).__init__(*args, **kwargs)
 
 
+# Alter the font in the web. Somehow default font is bigger there
+def alter_fonts():
+    plt.rc('font', size=9) #controls default text size
+    plt.rc('axes', titlesize=8) #fontsize of the title
+    plt.rc('axes', labelsize=8) #fontsize of the x and y labels
+    plt.rc('xtick', labelsize=8) #fontsize of the x tick labels
+    plt.rc('ytick', labelsize=8) #fontsize of the y tick labels
+    plt.rc('legend', fontsize=8) #fontsize of the legend
+
 # 3 functions to add value labels
 # This will add the value of import, export and m3 to the top of the bar
 def add3labels(bar1,bar2, bar3):
@@ -106,6 +115,10 @@ def netto_per_dag(window, data, all_values, type, WEB=False):
     #Get current plot/figure and clear it
     fig = plt.gcf()
     plt.clf()
+    if WEB:
+        # For web change default font size from 10 to 8
+        plt.rc('font', size=8)
+        #alter_fonts()
     plt.xlabel('metingen per 24 uur')
     # Remove below locale value or replace with your own locale
     locale.setlocale(locale.LC_ALL, 'nl_NL.UTF-8')
@@ -162,13 +175,22 @@ def netto_per_dag(window, data, all_values, type, WEB=False):
     plt.xlim(0, 240)  # Defines the limit of your x-axis
     plt.xticks(time_stamps, labels=time_labels, rotation=30)  # Adapts the x-axis scale and labels
 
-    DPI = fig.get_dpi()
-    # -------- you have to play with this size to reduce the movement error when the mouse hovers over the figure, it's close to canvas size
-    fig.set_size_inches(gr_width / float(DPI), gr_height / float(DPI))
-    #plt.show()
-    # ------------------------------- Instead of plt.show()
-    draw_figure_w_toolbar(window['fig_cv'].TKCanvas, fig, window['controls_cv'].TKCanvas)
-
+    # WEB is used in the webscripts and on the pc always False
+    if WEB:
+        ts = str(time.time()).split(".")
+        plt.savefig(savedir + (ts[0]) + '.png', dpi=120)
+        PNG = (ts[0]) + '.png'
+        return PNG
+    else:
+        fig = plt.gcf()
+        DPI = fig.get_dpi()
+        # -------- you have to play with this size to reduce the movement error when the mouse hovers over the figure, it's close to canvas size
+        fig.set_size_inches(gr_width / float(DPI), gr_height / float(DPI))
+        #plt.show()
+        # ------------------------------- Instead of plt.show()
+        draw_figure_w_toolbar(window['fig_cv'].TKCanvas, fig, window['controls_cv'].TKCanvas)
+        PNG = ''
+        return PNG
 
 def gescheiden_per_dag(window, data, all_values):
     #Get current plot/figure and clear it
@@ -207,6 +229,11 @@ def verbruik_per_dag(window, data, all_values, WEB=False):
     #Get current plot/figure and clear it
     fig = plt.gcf()
     plt.clf()
+    if WEB:
+        # For web change default font size from 10 to 8
+        plt.rc('font', size=8)
+        #alter_fonts()
+
     X_axis = np.arange(len(data.dagdatum))
     plot_chart(all_values, X_axis, data, "dagen")
 
@@ -217,7 +244,7 @@ def verbruik_per_dag(window, data, all_values, WEB=False):
     # WEB is used in the webscripts and on the pc always False
     if WEB:
         ts = str(time.time()).split(".")
-        plt.savefig(savedir + (ts[0]) + '.png', dpi=150)
+        plt.savefig(savedir + (ts[0]) + '.png', dpi=120)
         PNG = (ts[0]) + '.png'
         return PNG
     else:
@@ -248,7 +275,7 @@ def verbruik_per_week(window, data, all_values, WEB=False):
     # WEB is used in the webscripts and on the pc always False
     if WEB:
         ts = str(time.time()).split(".")
-        plt.savefig(savedir + (ts[0]) + '.png', dpi=150)
+        plt.savefig(savedir + (ts[0]) + '.png', dpi=120)
         PNG = (ts[0]) + '.png'
         return PNG
     else:
@@ -278,7 +305,7 @@ def verbruik_per_maand(window, data, all_values, WEB=False):
     # WEB is used in the webscripts and on the pc always False
     if WEB:
         ts = str(time.time()).split(".")
-        plt.savefig(savedir + (ts[0]) + '.png', dpi=150)
+        plt.savefig(savedir + (ts[0]) + '.png', dpi=120)
         PNG = (ts[0]) + '.png'
         return PNG
     else:
