@@ -24,7 +24,6 @@ from datetime import timedelta
 # My python functions
 import mpgraphs
 import config
-import ui_layout
 import queries as q
 
 def do_query(window, myquery):
@@ -131,8 +130,12 @@ cursor = connection.cursor()
 event = sys.argv[1]
 periodes = sys.argv[2]
 grafiektype = sys.argv[3]
+gewenste_datum = ''
+if (len(sys.argv) == 5):  # program name (0) with 4 arguments
+    gewenste_datum = sys.argv[4]
+
 global PNG
-# Window was a pysimplegui array
+# window was a pysimplegui array, but we don need that here. For simplicity we keep it in and initialize an empty one
 window = [[]]
 
 # Remove old png files
@@ -154,16 +157,14 @@ elif event == 'Stroom vandaag':
 elif event == 'Gas vandaag':
     data = pandas.read_sql(q.q_netto_gas_per_dag, connection)
     PNG = mpgraphs.netto_per_dag(window, data, values, "gas", True)
-elif event == '-CAL-':
-    myquery = "select timestamp tmstmp, verbruiknuw, importkwh, exportkwh from v_p1data where substr(timestamp,1,10) == '" + \
-              values['-CAL-'] + "'"
+elif event == 'Stroom op datum':
+    myquery = "select timestamp tmstmp, verbruiknuw, importkwh, exportkwh from v_p1data where substr(timestamp,1,10) == '" + gewenste_datum + "'"
     data = pandas.read_sql(myquery, connection)
-    mpgraphs.netto_per_dag(window, data, values, "el")
-elif event == '-GCAL-':
-    myquery = "select t_next.timestamp tmstmp, round((t_next.gastotaalm3 - t.gastotaalm3),2) as totaalm3 from p1meterdata  as t inner join p1meterdata as t_next on t_next.rowid=t.rowid+1  where substr(t_next.timestamp,1,10) == '" + \
-              values['-GCAL-'] + "' order by t_next.timestamp"
+    PNG = mpgraphs.netto_per_dag(window, data, values, "el", True, gewenste_datum)
+elif event == 'Gas op datum':
+    myquery = "select t_next.timestamp tmstmp, round((t_next.gastotaalm3 - t.gastotaalm3),2) as totaalm3 from p1meterdata  as t inner join p1meterdata as t_next on t_next.rowid=t.rowid+1  where substr(t_next.timestamp,1,10) == '" + gewenste_datum + "' order by t_next.timestamp"
     data = pandas.read_sql(myquery, connection)
-    mpgraphs.netto_per_dag(window, data, values, "gas")
+    PNG = mpgraphs.netto_per_dag(window, data, values, "gas", True, gewenste_datum)
 elif event == 'Per week':
     data = pandas.read_sql(q.q_verbruik_per_week, connection)
     PNG = mpgraphs.verbruik_per_week(window, data.tail(get_periodes(values)), values, True)

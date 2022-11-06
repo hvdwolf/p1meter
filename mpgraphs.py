@@ -111,7 +111,7 @@ def plot_chart(all_values, X_axis, data, disp_optie):
         #plt.savefig('pipo.png')
 
 # ------------------------------- Graphs for values
-def netto_per_dag(window, data, all_values, type, WEB=False):
+def netto_per_dag(window, data, all_values, type, WEB=False, datum=''):
     #Get current plot/figure and clear it
     fig = plt.gcf()
     plt.clf()
@@ -141,17 +141,17 @@ def netto_per_dag(window, data, all_values, type, WEB=False):
             stroomnetto = " kWh, verbruikt: " + str(round(impE-expE,1)) + " kWh)"
         plt.ylabel('Watts')
         plt.title("positief (paars): verbruikt; negatief (groen): door zonnepanelen geleverd")
-        if (len(all_values['-CAL-']) == 0):
+        if (len(datum) == 0):
             plt.suptitle("energie vandaag " + stroom + stroomnetto)
         else:
-            plt.suptitle("energie verbruik op " + datetime.strptime(all_values['-CAL-'], '%Y-%m-%d').strftime('%a %d-%m-%Y') + " " + stroom + stroomnetto)
+            plt.suptitle("energie verbruik op " + datetime.strptime(datum, '%Y-%m-%d').strftime('%a %d-%m-%Y') + " " + stroom + stroomnetto)
     else:
         plt.ylabel('m3')
         plt.title("Gasverbruik")
-        if (len(all_values['-GCAL-']) == 0):
+        if (len(datum) == 0):
             plt.suptitle("gasverbruik vandaag: " + str(round((data.totaalm3).to_numpy().sum(),1)) + " m3")
         else:
-            plt.suptitle("gasverbruik op " + datetime.strptime(all_values['-GCAL-'], '%Y-%m-%d').strftime('%a %d-%m-%Y') + ": " + str(round((data.totaalm3).to_numpy().sum(),1)) + " m3")
+            plt.suptitle("gasverbruik op " + datetime.strptime(datum, '%Y-%m-%d').strftime('%a %d-%m-%Y') + ": " + str(round((data.totaalm3).to_numpy().sum(),1)) + " m3")
 
     plt.grid(axis='y', linestyle='--')
 

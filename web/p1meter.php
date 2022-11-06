@@ -11,14 +11,28 @@
     th, td { padding: 5px; }
 
 </style>
+ <script src="/js/jquery-3.6.1.js"></script>
+ <script src="/js/jquery-ui.js"></script>
+
+ <script>
+ $(function() 
+ { 
+      $( "#datepicker" ).datepicker({
+      changeMonth:true,
+      changeYear:true,
+      yearRange:"-100:+0",
+      dateFormat:"dd MM yy"
+     });
+ });
+</script>
+
 <link rel="shortcut icon" href="web_images/favicon.ico" >
 </head>
 <body>
 <h2>Overzicht p1 meter data</h2>
 <form>
-<strong>Stroomverbruik</strong>&nbsp;<input type="submit" name="btn_submit" value="Stroom vandaag"/>
-<input type="submit" name="btn_submit" value="Stroom op datum" />&nbsp;&nbsp;&nbsp;
-<strong>Gasverbruik</strong>&nbsp;<input type="submit" name="btn_submit" value="Gas vandaag" /> <input type="submit" name="btn_submit" value="Gas op datum" />
+<strong>Verbruik vandaag</strong>&nbsp;<input type="submit" name="btn_submit" value="Stroom vandaag"/>&nbsp;<input type="submit" name="btn_submit" value="Gas vandaag" />&nbsp;&nbsp;&nbsp;
+<strong>Verbruik op datum</strong>&nbsp;<input type="submit" name="btn_submit" value="Stroom op datum" />&nbsp;<input type="submit" name="btn_submit" value="Gas op datum" /><input type="text" name="txtDate"  id="datepicker" />
 &nbsp;&nbsp;<strong>Overzichten</strong>&nbsp;<input type="submit" name="btn_submit" value="Per dag" /> <input type="submit" name="btn_submit" value="Per week" />&nbsp;<input type="submit" name="btn_submit" value="Per maand" />
 <!-- radio button group periodes -->
 <p><strong>Periodes (dagen/weken/maanden)</strong>
@@ -37,10 +51,10 @@
 <input type="radio" name="grafiektype" id="G" value="G" /><label for="G">Gas verbruik</label>
 </form>
 <?php
-print "Gevraagd: Optie ".$_REQUEST['btn_submit']."; periodes ".$_REQUEST['periodes']."; grafiektype ".$_REQUEST['grafiektype'];
+print "<div style=\"color:blue\">Gevraagd: Optie ".$_REQUEST['btn_submit']."; periodes ".$_REQUEST['periodes']."; grafiektype ".$_REQUEST['grafiektype']."; datum ".$_REQUEST['txtDate']."</div>";
 
 //print "<br>Command is: /BigData/software/p1meter/wp1meter.py \"".$_REQUEST['btn_submit']."\" ".$_REQUEST['periodes']." ".$_REQUEST['grafiektype']."<br>";
-$command = escapeshellcmd("/BigData/software/p1meter/wp1meter.py \"".$_REQUEST['btn_submit']."\" ".$_REQUEST['periodes']." ".$_REQUEST['grafiektype']);
+$command = escapeshellcmd("/BigData/software/p1meter/wp1meter.py \"".$_REQUEST['btn_submit']."\" ".$_REQUEST['periodes']." ".$_REQUEST['grafiektype']." ".$_REQUEST['txtDate']);
 $output = shell_exec($command);
 //print "<br>Output from python script<br>";
 //print $output;
