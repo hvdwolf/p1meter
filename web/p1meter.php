@@ -48,7 +48,7 @@
 <input type="radio" name="grafiektype" id="G" value="G" /><label for="G">Gas verbruik</label>
 </form>
 <?php
-print "<div style=\"color:blue\">Gevraagd: Optie ".$_REQUEST['btn_submit']."; periodes ".$_REQUEST['periodes']."; grafiektype ".$_REQUEST['grafiektype']."; datum ".$_REQUEST['txtDate']."</div>";
+print "<div style=\"color:blue\"><strong>Gevraagd:</strong> Optie \"".$_REQUEST['btn_submit']."\"; periodes ".$_REQUEST['periodes']."; grafiektype ".$_REQUEST['grafiektype']."; datum ".$_REQUEST['txtDate']."</div>";
 
 //print "<br>Command is: /BigData/software/p1meter/wp1meter.py \"".$_REQUEST['btn_submit']."\" ".$_REQUEST['periodes']." ".$_REQUEST['grafiektype']."<br>";
 $command = escapeshellcmd("/BigData/software/p1meter/wp1meter.py \"".$_REQUEST['btn_submit']."\" ".$_REQUEST['periodes']." ".$_REQUEST['grafiektype']." ".$_REQUEST['txtDate']);

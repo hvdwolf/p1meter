@@ -178,7 +178,7 @@ def netto_per_dag(window, data, all_values, type, WEB=False, datum=''):
     # WEB is used in the webscripts and on the pc always False
     if WEB:
         ts = str(time.time()).split(".")
-        plt.savefig(savedir + (ts[0]) + '.png', dpi=120)
+        plt.savefig(savedir + (ts[0]) + '.png', dpi=120, bbox_inches="tight")
         PNG = (ts[0]) + '.png'
         return PNG
     else:
@@ -244,7 +244,7 @@ def verbruik_per_dag(window, data, all_values, WEB=False):
     # WEB is used in the webscripts and on the pc always False
     if WEB:
         ts = str(time.time()).split(".")
-        plt.savefig(savedir + (ts[0]) + '.png', dpi=120)
+        plt.savefig(savedir + (ts[0]) + '.png', dpi=120, bbox_inches="tight")
         PNG = (ts[0]) + '.png'
         return PNG
     else:
@@ -275,7 +275,7 @@ def verbruik_per_week(window, data, all_values, WEB=False):
     # WEB is used in the webscripts and on the pc always False
     if WEB:
         ts = str(time.time()).split(".")
-        plt.savefig(savedir + (ts[0]) + '.png', dpi=120)
+        plt.savefig(savedir + (ts[0]) + '.png', dpi=120, bbox_inches="tight")
         PNG = (ts[0]) + '.png'
         return PNG
     else:
@@ -305,7 +305,7 @@ def verbruik_per_maand(window, data, all_values, WEB=False):
     # WEB is used in the webscripts and on the pc always False
     if WEB:
         ts = str(time.time()).split(".")
-        plt.savefig(savedir + (ts[0]) + '.png', dpi=120)
+        plt.savefig(savedir + (ts[0]) + '.png', dpi=120, bbox_inches="tight")
         PNG = (ts[0]) + '.png'
         return PNG
     else:
