@@ -272,6 +272,7 @@ def verbruik_per_week(window, data, all_values, WEB=False):
     #plt.xticks(X_axis, data.weekno)
     plt.xticks(X_axis, data.wknrdatum)
     plt.xlabel('weeknummers (datum)')
+    plt.legend(loc='upper right')
     # WEB is used in the webscripts and on the pc always False
     if WEB:
         ts = str(time.time()).split(".")
@@ -300,6 +301,7 @@ def verbruik_per_maand(window, data, all_values, WEB=False):
     #plt.xticks(X_axis, data.weekno)
     plt.xticks(X_axis, data.month_name)
     plt.xlabel('maandnummers (maand)')
+    plt.legend(loc='upper right')
     #plt.ylabel('kWh / m3')
 
     # WEB is used in the webscripts and on the pc always False
