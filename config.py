@@ -11,6 +11,11 @@
 # the GNU General Public Licence for more details.
 
 # This file contains some variables/constants we want to keep out of our main program
+# When wanting to download a sqlite3 database we want to have content-type/mime-type and chanrset
+# https://some_webserver/Some_sqlite3.db    => application/x-sqlite3; charset=binary
+# url = 'https://some_webserver'
+# headers = {'Content-Type': 'application/x-sqlite3'}
+# response = requests.get(url, headers=headers)
 
 sqlite3_DB_file = "/home/hvdwolf/media/Public/p1meter/p1meter_data.db"
 #sqlite3_DB_file = "./p1meter_data.db"
