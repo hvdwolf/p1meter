@@ -103,7 +103,7 @@ def plot_chart(all_values, X_axis, data, disp_optie):
             plt.ylabel('kWh')
             plt.title("energie geleverd de afgelopen " + disp_optie)
         elif (all_values['t_gasverbruik']):  # Geproduceerde hoeveelheid kWh
-            m3 = plt.bar(X_axis, data.importkwh, color='r', width=0.2, label='m3 verbruikt')
+            m3 = plt.bar(X_axis, data.gastotaalm3, color='r', width=0.2, label='m3 verbruikt')
             addlabel(m3)
             plt.ylabel('m3')
             plt.title("gasverbruik de afgelopen " + disp_optie)
@@ -272,6 +272,7 @@ def verbruik_per_week(window, data, all_values, WEB=False):
     #plt.xticks(X_axis, data.weekno)
     plt.xticks(X_axis, data.wknrdatum)
     plt.xlabel('weeknummers (datum)')
+    plt.legend(loc='upper right')
     # WEB is used in the webscripts and on the pc always False
     if WEB:
         ts = str(time.time()).split(".")
@@ -300,6 +301,7 @@ def verbruik_per_maand(window, data, all_values, WEB=False):
     #plt.xticks(X_axis, data.weekno)
     plt.xticks(X_axis, data.month_name)
     plt.xlabel('maandnummers (maand)')
+    plt.legend(loc='upper right')
     #plt.ylabel('kWh / m3')
 
     # WEB is used in the webscripts and on the pc always False
