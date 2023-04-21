@@ -14,7 +14,7 @@
 # the GNU General Public Licence for more details.
 
 
-import os, os.path, sqlite3, urllib.request, json, csv
+import os, os.path, sqlite3, sys, urllib.request, json, csv
 #import panda as pd
 from datetime import date
 from datetime import timedelta
@@ -45,12 +45,22 @@ DB_file = "/home/harryvanderwolf/p1meter_data.db"
 # I used to write csv as well but stopped it. Set to True to re-enable
 csv_file = False
 p1_data_file = '/home/harryvanderwolf/p1meter_data.csv'
-IP_p1w = '192.168.2.137'
+IP_p1w = '192.168.2.102'
 Version = 0.2
 # End of constants
 
+# First test if our dongle is still at the same address
+response = os.system("ping -c 1 " + IP_p1w)
+if response == 0:
+    print(IP_p1w, 'is up!')
+else:
+    print(IP_p1w, 'is down!')
+    os.system('echo "ip address p1meter dongle has changed" | /usr/bin/mutt -s "ip-address p1meter dongle changed" harry.vanderwolf@covestro.com')
+    os.system('echo "ip address p1meter dongle has changed" | /usr/bin/mutt -s "ip-address p1meter dongle changed" hvdwolf@gmail.com')
+    sys.exit("ip-address p1meter dongle has changed")
+
 # Get the data from P1meter WiFi dongle
-with urllib.request.urlopen("http://192.168.2.137/api/v1/data") as url:
+with urllib.request.urlopen("http://192.168.2.102/api/v1/data") as url:
     data = json.load(url)
     #pdata = pd.read_json(data)
 
