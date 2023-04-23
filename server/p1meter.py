@@ -14,7 +14,7 @@
 # the GNU General Public Licence for more details.
 
 
-import os, os.path, sqlite3, sys, urllib.request, json, csv
+import os, os.path, sqlite3, sys, urllib.request, json, csv, time, shutil
 #import panda as pd
 from datetime import date
 from datetime import timedelta
@@ -114,3 +114,8 @@ if (csv_file):
         csv_writer.writerow(header)
         csv_writer.writerow(data.values())
         data_file.close()
+
+# Now wait 5 seconds to make sure the database has nicely closed
+time.sleep(5)
+shutil.copy2('/home/harryvanderwolf/p1meter_data.db', '/media/PUBLIC/p1meter/p1meter_data.db')
+shutil.copy2('/home/harryvanderwolf/p1meter_data.db', '/var/www/html/tmp/p1meter_data.db')
